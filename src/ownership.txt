@@ -1,0 +1,44 @@
+connect the ownership file scope borrow or ownership
+
++-----------------------+
+| call_stack            |
+|                       |
+|  +-----------------+  |
+|  | mut_refrence    |  | 
+|  | &mut _a         |  |  <- First mutable borrow starts and ends within this block.
+|  +-----------------+  |
+|                       |
+|  +-----------------+  |
+|  | mut2_ref        |  |  
+|  | &mut _a         |  |  <- Second mutable borrow starts and ends within this block.
+|  +-----------------+  |
+|                       |
+| println!("{}", _a);   |  <- Safe to use `_a` as there are no active borrows.
++-----------------------+
+
+
+              scop multiple mutable refrence
+1. First Mutable Reference:
+
+     mut_refrence(&mut _a);
+     The function mut_refrence borrows _a mutably.
+     While inside mut_refrence, the mutable reference is active,
+     and you cannot create another mutable reference to _a.
+     After mut_refrence finishes execution, the mutable borrow ends.
+2. Second Mutable Reference:
+
+     mut2_ref(&mut _a);
+     Now, mut2_ref borrows _a mutably.
+     While inside mut2_ref, the mutable reference is active, and again,
+     you cannot create another mutable reference to _a.
+     After mut2_ref finishes execution, the mutable borrow ends.
+3. Use of _a:
+
+     After both function calls,
+     _a can be safely used because there are no active mutable borrows.
+4. Key Points
+     Borrow Scope: The mutable borrow is only active within the function call.
+     Once the function returns, the borrow ends.
+     Sequential Borrows: You can have multiple mutable references as long as they are not active simultaneously. Each function call ends the previous borrow before the next one begins.
+
+
